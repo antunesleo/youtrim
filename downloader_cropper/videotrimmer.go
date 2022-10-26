@@ -10,7 +10,8 @@ type VideoTrimmerImpl struct{}
 
 func (v *VideoTrimmerImpl) Trim(fullPath, trimmedPath string, start, end time.Duration) error {
 	fullVideo, _ := cinema.Load(fullPath)
-	fullVideo.Trim(start*time.Second, end*time.Second)
+
+	fullVideo.Trim(start, end)
 	fullVideo.Render(trimmedPath)
 	return nil
 }

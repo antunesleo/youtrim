@@ -2,7 +2,6 @@ package youtrim
 
 import (
 	"io"
-	"time"
 )
 
 type StubYtDownloader struct {
@@ -34,14 +33,14 @@ func (s *StubVideoStorage) CreateVideoFile(stream io.ReadCloser, filepath string
 
 type VideoTrimmerTrimArgs struct {
 	FullPath, TrimmedPath string
-	Start, End            time.Duration
+	Start, End            float64
 }
 
 type StubVideoTrimmer struct {
 	Calls []VideoTrimmerTrimArgs
 }
 
-func (s *StubVideoTrimmer) Trim(fullPath, trimmedPath string, start, end time.Duration) error {
+func (s *StubVideoTrimmer) Trim(fullPath, trimmedPath string, start, end float64) error {
 	s.Calls = append(s.Calls, VideoTrimmerTrimArgs{fullPath, trimmedPath, start, end})
 	return nil
 }

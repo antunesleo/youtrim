@@ -1,18 +1,17 @@
 package youtrim
 
 import (
-	"time"
-
-	"github.com/jtguibas/cinema"
+	"github.com/mowshon/moviego"
 )
 
 type VideoTrimmerImpl struct{}
 
-func (v *VideoTrimmerImpl) Trim(fullPath, trimmedPath string, start, end time.Duration) error {
-	fullVideo, _ := cinema.Load(fullPath)
-
-	fullVideo.Trim(start, end)
-	fullVideo.Render(trimmedPath)
+func (v *VideoTrimmerImpl) Trim(fullPath, trimmedPath string, start, end float64) error {
+	first, _ := moviego.Load(fullPath)
+	err := first.SubClip(start, end).Output(trimmedPath).Run()
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

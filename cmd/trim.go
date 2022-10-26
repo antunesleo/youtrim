@@ -6,7 +6,6 @@ package cmd
 
 import (
 	"strconv"
-	"time"
 
 	youtrim "github.com/antunesleo/youtrim/downloader_cropper"
 	"github.com/spf13/cobra"
@@ -26,17 +25,14 @@ to quickly create a Cobra application.`,
 		startFlag, _ := cmd.Flags().GetString("start")
 		endFlag, _ := cmd.Flags().GetString("end")
 
-		start, _ := strconv.ParseFloat(startFlag, 32)
-		end, _ := strconv.ParseFloat(endFlag, 32)
-
-		startDuration := time.Duration(start * float64(time.Second))
-		endDuration := time.Duration(end * float64(time.Second))
+		start, _ := strconv.ParseFloat(startFlag, 64)
+		end, _ := strconv.ParseFloat(endFlag, 64)
 
 		ytDownloader := youtrim.NewYtDownloader()
 		videoStorage := youtrim.NewVideoStorage()
 		videoTrimmer := youtrim.NewVideoTrimmerImpl()
 		useCase := youtrim.NewTrimYtVideoUseCase(ytDownloader, videoStorage, videoTrimmer)
-		useCase.DownloadAndTrimYtVideo(urlFlag, startDuration, endDuration)
+		useCase.DownloadAndTrimYtVideo(urlFlag, float64(start), float64(end))
 	},
 }
 

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/antunesleo/youtrim"
+	youtrim "github.com/antunesleo/youtrim/downloader_cropper"
 )
 
 func TestVideoStorage(t *testing.T) {

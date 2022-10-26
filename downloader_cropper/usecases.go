@@ -3,7 +3,6 @@ package youtrim
 import (
 	"fmt"
 	"io"
-	"time"
 )
 
 const FullVideoPath = "video.mp4"
@@ -18,7 +17,7 @@ type VideoStorage interface {
 }
 
 type VideoTrimmer interface {
-	Trim(fullPath, trimmedPath string, start, end time.Duration) error
+	Trim(fullPath, trimmedPath string, start, end float64) error
 }
 
 type TrimYtVideoUseCase struct {
@@ -27,7 +26,7 @@ type TrimYtVideoUseCase struct {
 	videoTrimmer VideoTrimmer
 }
 
-func (t *TrimYtVideoUseCase) DownloadAndTrimYtVideo(url string, start, end time.Duration) error {
+func (t *TrimYtVideoUseCase) DownloadAndTrimYtVideo(url string, start, end float64) error {
 	stream, err := t.ytDownloader.DownloadYtVideo(url)
 	if err != nil {
 		return fmt.Errorf("Failed to download and trim video; %w", err)

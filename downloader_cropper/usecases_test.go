@@ -4,9 +4,8 @@ import (
 	"io"
 	"strings"
 	"testing"
-	"time"
 
-	"github.com/antunesleo/youtrim"
+	youtrim "github.com/antunesleo/youtrim/downloader_cropper"
 )
 
 func TestTrimYtVideoUseCase(t *testing.T) {
@@ -24,8 +23,8 @@ func TestTrimYtVideoUseCase(t *testing.T) {
 		)
 
 		url := "some-url"
-		start := 3 * time.Second
-		end := 6 * time.Second
+		start := 3.0
+		end := 6.0
 		err := usecase.DownloadAndTrimYtVideo(url, start, end)
 
 		assertNotError(err, t)
@@ -60,13 +59,12 @@ func TestTrimYtVideoUseCase(t *testing.T) {
 		}
 
 		if start != stubVideoTrimmer.Calls[0].Start {
-			t.Errorf("Want %d got %d", start, stubVideoTrimmer.Calls[0].Start)
+			t.Errorf("Want %v got %v", start, stubVideoTrimmer.Calls[0].Start)
 		}
 
 		if end != stubVideoTrimmer.Calls[0].End {
-			t.Errorf("Want %d got %d", end, stubVideoTrimmer.Calls[0].End)
+			t.Errorf("Want %v got %v", end, stubVideoTrimmer.Calls[0].End)
 		}
-
 	})
 
 	t.Run("Download and trim youtube video failed due to download error", func(t *testing.T) {
@@ -83,8 +81,8 @@ func TestTrimYtVideoUseCase(t *testing.T) {
 		)
 
 		url := "please-fail"
-		start := 3 * time.Second
-		end := 6 * time.Second
+		start := 3.0
+		end := 6.0
 		err := usecase.DownloadAndTrimYtVideo(url, start, end)
 
 		assertCallCount(1, len(stubYtDownloader.Calls), t)

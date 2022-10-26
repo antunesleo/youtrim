@@ -3,7 +3,7 @@ package youtrim_test
 import (
 	"testing"
 
-	"github.com/antunesleo/youtrim"
+	youtrim "github.com/antunesleo/youtrim/downloader_cropper"
 )
 
 const testVideoURL = "https://www.youtube.com/watch?v=jhFDyDgMVUI"

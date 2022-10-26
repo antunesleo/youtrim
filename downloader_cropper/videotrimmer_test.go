@@ -4,11 +4,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/antunesleo/youtrim"
+	youtrim "github.com/antunesleo/youtrim/downloader_cropper"
 )
 
 func TestVideoTrimmerImpl(t *testing.T) {
-	fullPath := "./videos/testvideo.mp4"
+	fullPath := "./../videos/testvideo.mp4"
 	trimmedPath := "./trimmed.mp4"
 
 	videoTrimmer := youtrim.NewVideoTrimmerImpl()

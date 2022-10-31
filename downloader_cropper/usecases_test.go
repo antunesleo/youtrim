@@ -6,9 +6,10 @@ import (
 	"testing"
 
 	youtrim "github.com/antunesleo/youtrim/downloader_cropper"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestTrimYtVideoUseCase(t *testing.T) {
+func TestUnitTrimYtVideoUseCase(t *testing.T) {
 	t.Run("Download and trim youtube video", func(t *testing.T) {
 		stringReader := strings.NewReader("shiny!")
 		stubStreamVideo := io.NopCloser(stringReader)
@@ -27,44 +28,16 @@ func TestTrimYtVideoUseCase(t *testing.T) {
 		end := 6.0
 		err := usecase.DownloadAndTrimYtVideo(url, start, end)
 
-		assertNotError(err, t)
-		assertCallCount(1, len(stubYtDownloader.Calls), t)
-		assertCalledWith(url, stubYtDownloader.Calls[0], t)
-
-		assertCallCount(1, len(stubVideoStorage.Calls), t)
-		if stubStreamVideo != stubVideoStorage.Calls[0].Stream {
-			t.Errorf("Want %d got %d", stubStreamVideo, stubVideoStorage.Calls[0].Stream)
-		}
-
-		if youtrim.FullVideoPath != stubVideoStorage.Calls[0].Filepath {
-			t.Errorf("Want %s got %s", youtrim.FullVideoPath, stubVideoStorage.Calls[0].Filepath)
-		}
-
-		assertCallCount(1, len(stubVideoTrimmer.Calls), t)
-
-		if youtrim.FullVideoPath != stubVideoTrimmer.Calls[0].FullPath {
-			t.Errorf(
-				"Want %s got %s",
-				youtrim.FullVideoPath,
-				stubVideoTrimmer.Calls[0].FullPath,
-			)
-		}
-
-		if youtrim.TrimmedVideoPath != stubVideoTrimmer.Calls[0].TrimmedPath {
-			t.Errorf(
-				"Want %s got %s",
-				youtrim.TrimmedVideoPath,
-				stubVideoTrimmer.Calls[0].TrimmedPath,
-			)
-		}
-
-		if start != stubVideoTrimmer.Calls[0].Start {
-			t.Errorf("Want %v got %v", start, stubVideoTrimmer.Calls[0].Start)
-		}
-
-		if end != stubVideoTrimmer.Calls[0].End {
-			t.Errorf("Want %v got %v", end, stubVideoTrimmer.Calls[0].End)
-		}
+		assert.Nil(t, err)
+		assert.Equal(t, 1, len(stubYtDownloader.Calls))
+		assert.Equal(t, url, stubYtDownloader.Calls[0])
+		assert.Equal(t, stubStreamVideo, stubVideoStorage.Calls[0].Stream)
+		assert.Equal(t, youtrim.FullVideoPath, stubVideoStorage.Calls[0].Filepath)
+		assert.Equal(t, 1, len(stubVideoTrimmer.Calls))
+		assert.Equal(t, youtrim.FullVideoPath, stubVideoTrimmer.Calls[0].FullPath)
+		assert.Equal(t, youtrim.TrimmedVideoPath, stubVideoTrimmer.Calls[0].TrimmedPath)
+		assert.Equal(t, start, stubVideoTrimmer.Calls[0].Start)
+		assert.Equal(t, end, stubVideoTrimmer.Calls[0].End)
 	})
 
 	t.Run("Download and trim youtube video failed due to download error", func(t *testing.T) {
@@ -85,24 +58,9 @@ func TestTrimYtVideoUseCase(t *testing.T) {
 		end := 6.0
 		err := usecase.DownloadAndTrimYtVideo(url, start, end)
 
-		assertCallCount(1, len(stubYtDownloader.Calls), t)
-		assertCalledWith(url, stubYtDownloader.Calls[0], t)
-		assertCallCount(0, len(stubVideoStorage.Calls), t)
-
-		if err == nil {
-			t.Errorf("want error to be nil got %d", err)
-		}
+		assert.Equal(t, 1, len(stubYtDownloader.Calls))
+		assert.Equal(t, url, stubYtDownloader.Calls[0])
+		assert.Equal(t, 0, len(stubVideoStorage.Calls))
+		assert.NotNil(t, err)
 	})
-}
-
-func assertCalledWith(want, got string, t *testing.T) {
-	if want != got {
-		t.Errorf("want URL %s got %s", want, got)
-	}
-}
-
-func assertCallCount(want, got int, t *testing.T) {
-	if want != got {
-		t.Fatalf("want number calls %d got %d", want, got)
-	}
 }

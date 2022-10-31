@@ -6,9 +6,14 @@ import (
 
 	"github.com/antunesleo/youtrim/cmd"
 	youtrim "github.com/antunesleo/youtrim/downloader_cropper"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestRun(t *testing.T) {
+func TestIntegrationTrim(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping functional test")
+	}
+
 	ytDownloader := youtrim.NewYtDownloader()
 	videoStorage := youtrim.NewVideoStorage()
 	videoTrimmer := youtrim.NewVideoTrimmerImpl()
@@ -27,24 +32,17 @@ func TestRun(t *testing.T) {
 		},
 	)
 
+	err := command.Execute()
 	trimmedPath := "./trimmedvideo.mp4"
 	fullPath := "./video.mp4"
-
-	err := command.Execute()
-	if err != nil {
-		t.Errorf("expected error to be nil")
-	}
-
 	trimmedVideo, trimmedErr := os.Open(trimmedPath)
-	if trimmedErr != nil {
-		t.Fatalf("failed to opened trimmed file %d", trimmedErr)
-	}
 	trimmedStat, _ := trimmedVideo.Stat()
-
 	fullVideo, _ := os.Open(fullPath)
 	fullStat, _ := fullVideo.Stat()
+	assert.Nil(t, err)
+	assert.Nil(t, trimmedErr)
+	assert.True(t, trimmedStat.Size() < fullStat.Size())
 
-	if trimmedStat.Size() > fullStat.Size() {
-		t.Errorf("Expected trimmed video size to be smaller than full video")
-	}
+	os.Remove(trimmedPath)
+	os.Remove(fullPath)
 }

@@ -8,9 +8,14 @@ import (
 	"testing"
 
 	youtrim "github.com/antunesleo/youtrim/downloader_cropper"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestVideoStorage(t *testing.T) {
+func TestIntegrationVideoStorage(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping integration test")
+	}
+
 	t.Run("test should save stream", func(t *testing.T) {
 		filepath := "video.mp4"
 		defer os.Remove(filepath)
@@ -21,13 +26,11 @@ func TestVideoStorage(t *testing.T) {
 		vs := youtrim.NewVideoStorage()
 		err := vs.CreateVideoFile(stubStreamVideo, filepath)
 
-		assertNotError(err, t)
+		assert.Nil(t, err)
 
 		videoFile, _ := ioutil.ReadFile(filepath)
 		got := string(videoFile)
 
-		if got != want {
-			t.Errorf("want %s got %s", want, got)
-		}
+		assert.Equal(t, got, want)
 	})
 }

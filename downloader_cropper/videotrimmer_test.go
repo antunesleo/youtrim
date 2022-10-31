@@ -5,27 +5,29 @@ import (
 	"testing"
 
 	youtrim "github.com/antunesleo/youtrim/downloader_cropper"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestVideoTrimmerImpl(t *testing.T) {
+func TestIntegrationVideoTrimmerImpl(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping integration test")
+	}
+
 	fullPath := "./../videos/testvideo.mp4"
 	trimmedPath := "./trimmed.mp4"
 
 	videoTrimmer := youtrim.NewVideoTrimmerImpl()
 	err := videoTrimmer.Trim(fullPath, trimmedPath, 2.0, 5.0)
 
-	assertNotError(err, t)
+	assert.Nil(t, err)
 
 	trimmedVideo, trimmedErr := os.Open(trimmedPath)
-	if trimmedErr != nil {
-		t.Fatalf("failed to opened trimmed file %d", trimmedErr)
-	}
-	trimmedStat, _ := trimmedVideo.Stat()
+	assert.Nil(t, trimmedErr)
 
+	trimmedStat, _ := trimmedVideo.Stat()
 	fullVideo, _ := os.Open(fullPath)
 	fullStat, _ := fullVideo.Stat()
 
-	if trimmedStat.Size() > fullStat.Size() {
-		t.Errorf("Expected trimmed video size to be smaller than full video")
-	}
+	assert.False(t, trimmedStat.Size() > fullStat.Size())
+	os.Remove(trimmedPath)
 }

@@ -1,0 +1,9 @@
+version: '3'
+services:
+  youtrim:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: youtrim
+    volumes:
+    - ./:/app

@@ -30,6 +30,10 @@ func (t *TrimCmdRunner) Run(cmd *cobra.Command, args []string) {
 	t.useCase.DownloadAndTrimYtVideo(urlFlag, float64(start), float64(end))
 }
 
+func NewTrimCmdRunner(useCase TrimYtVideoUseCaseInterface) *TrimCmdRunner {
+	return &TrimCmdRunner{useCase: useCase}
+}
+
 func init() {
 	ytDownloader := youtrim.NewYtDownloader()
 	videoStorage := youtrim.NewVideoStorage()
@@ -37,6 +41,11 @@ func init() {
 	useCase := youtrim.NewTrimYtVideoUseCase(ytDownloader, videoStorage, videoTrimmer)
 	trimCmdRunner := TrimCmdRunner{useCase: &useCase}
 
+	trimCmd := BuildTrimCmd(trimCmdRunner)
+	rootCmd.AddCommand(trimCmd)
+}
+
+func BuildTrimCmd(trimCmdRunner TrimCmdRunner) *cobra.Command {
 	var trimCmd = &cobra.Command{
 		Use:   "trim",
 		Short: "It downloads and trim a youtube video",
@@ -46,11 +55,13 @@ func init() {
 	and the --start and --end flags to specify the seconds to trim`,
 		Run: trimCmdRunner.Run,
 	}
-	rootCmd.AddCommand(trimCmd)
+
 	trimCmd.PersistentFlags().String("url", "", "Youtube video URL to download and trim")
 	trimCmd.PersistentFlags().String("start", "", "Video start (Seconds)")
 	trimCmd.PersistentFlags().String("end", "", "Video end (Seconds)")
 	trimCmd.MarkPersistentFlagRequired("url")
 	trimCmd.MarkPersistentFlagRequired("start")
 	trimCmd.MarkPersistentFlagRequired("end")
+
+	return trimCmd
 }

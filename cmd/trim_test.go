@@ -9,7 +9,31 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestIntegration(t *testing.T) {
+func TestUnitTrimCmdRunner(t *testing.T) {
+	type test struct {
+		name string
+		args []string
+	}
+
+	tests := []test{
+		{name: "Should failed due to missing URL", args: []string{}},
+		{name: "Should failed due to missing Start", args: []string{"--url", "url"}},
+		{name: "Should failed due to missing End", args: []string{"--url", "url", "--start", "2"}},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			trimCmdRunner := cmd.NewTrimCmdRunner(&youtrim.StubTrimYtVideoUseCase{})
+
+			command := cmd.BuildTrimCmd(*trimCmdRunner)
+			command.SetArgs(test.args)
+			err := command.Execute()
+			assert.NotNil(t, err)
+		})
+	}
+}
+
+func TestIntegrationTrimCommand(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping functional test")
 	}

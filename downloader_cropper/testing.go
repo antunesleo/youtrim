@@ -44,3 +44,18 @@ func (s *StubVideoTrimmer) Trim(fullPath, trimmedPath string, start, end float64
 	s.Calls = append(s.Calls, VideoTrimmerTrimArgs{fullPath, trimmedPath, start, end})
 	return nil
 }
+
+type DownloadAndTrim struct {
+	url        string
+	start, end float64
+}
+
+type StubTrimYtVideoUseCase struct {
+	StubStream io.ReadCloser
+	Calls      []DownloadAndTrim
+}
+
+func (s *StubTrimYtVideoUseCase) DownloadAndTrimYtVideo(url string, start, end float64) error {
+	s.Calls = append(s.Calls, DownloadAndTrim{url: url, start: start, end: end})
+	return nil
+}

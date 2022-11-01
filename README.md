@@ -1,9 +1,3 @@
-docker-compose run youtrim trim --url https://www.youtube.com/watch\?v\=ljeCPM38d8U --start 2 --end 4
-
-go test  ./... -run Unit
-
-go test  ./... -run Integration
-
 
 <div align="center">
   <h3 align="center">Youtrim</h3>
@@ -25,9 +19,6 @@ go test  ./... -run Integration
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -38,11 +29,8 @@ go test  ./... -run Integration
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -52,16 +40,6 @@ go test  ./... -run Integration
 ## About The Project
 
 Sometimes we need a easy way to trim/crop a youtube video. This tool just do that!
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-### Built With
-
-* [![Go][Golang]][https://go.dev/]
-* [![Moviego][Moviego]][https://github.com/mowshon/moviego]
-* [![Youtube][Youtube]][https://github.com/kkdai/youtube]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -88,7 +66,7 @@ _Below is an example of how you can instruct your audience on installing and set
    ```
 3. Have fun!
    ```sh
-   docker-compose run youtrim trim --url https://www.youtube.com/watch\?v\=ljeCPM38d8U --start
+   docker-compose run youtrim trim --url https://www.youtube.com/watch\?v\=ljeCPM38d8U --start 2 --end 4
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -113,15 +91,6 @@ _Below is an example of how you can instruct your audience on installing and set
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
 <!-- CONTRIBUTING -->
 ## Contributing
 
@@ -138,25 +107,9 @@ Don't forget to give the project a star! Thanks again!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- LICENSE -->
-## License
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
 <!-- CONTACT -->
 ## Contact
 
 Leo Antunes - antunesleo4@gmail.com
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
